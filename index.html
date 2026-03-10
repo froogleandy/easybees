@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy Bees</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/app.css" />
+
+  <!-- Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:      '#080808',
+            surf:    '#111111',
+            card:    '#171717',
+            bdr:     '#222222',
+            bdrl:    '#2d2d2d',
+            acc:     '#E8B84B',
+            accd:    '#C99B30',
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-bg text-white font-sans overflow-hidden" style="height:100vh;">
+
+  <!-- App Shell -->
+  <div id="app" class="flex h-screen overflow-hidden">
+
+    <!-- ── Sidebar ─────────────────────────────────── -->
+    <aside id="sidebar" class="w-52 flex-shrink-0 bg-surf border-r border-bdr flex flex-col z-50">
+
+      <!-- Logo -->
+      <div id="sidebar-logo" class="px-4 py-5 border-b border-bdr flex items-center justify-center" style="min-height:64px">
+        <div id="sidebar-logo-text">
+          <div class="text-acc font-black text-xl tracking-tight">Easy Bees</div>
+          <div class="text-xs mt-1 uppercase tracking-widest" style="color:var(--txtm)">Music Manager</div>
+        </div>
+        <div id="sidebar-logo-mark" style="display:none;font-size:22px;color:var(--acc);font-weight:900">B</div>
+      </div>
+
+      <!-- Search -->
+      <div id="sidebar-search" class="px-3 py-3">
+        <button id="global-search-btn" class="w-full flex items-center gap-2 bg-bg border border-bdr rounded-lg px-3 py-2 text-xs hover:border-bdrl transition-colors" style="color:var(--txts)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span class="flex-1 text-left">Search…</span>
+          <kbd class="px-1 rounded" style="font-size:9px;background:var(--bdr);color:var(--txts)">⌘K</kbd>
+        </button>
+      </div>
+
+      <!-- Nav -->
+      <nav id="sidebar-nav" class="flex-1 py-1">
+        <!-- Items injected by core.js -->
+      </nav>
+
+      <!-- Footer -->
+      <div id="sidebar-footer" class="px-4 py-3 border-t border-bdr" style="font-size:10px;color:var(--txtm)">
+        Easy Bees v1.0 · Houston TX
+      </div>
+    </aside>
+
+    <!-- ── Main Panel ──────────────────────────────── -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+
+      <!-- Module Header -->
+      <header id="module-header" class="flex-shrink-0 flex items-center justify-between px-7 border-b border-bdr bg-surf" style="height:60px;">
+        <h1 id="module-title" class="font-black text-xl tracking-tight" style="text-shadow:0 1px 0 rgba(255,255,255,0.03),0 -1px 0 rgba(0,0,0,0.6)">Dashboard</h1>
+        <div id="module-actions" class="flex items-center gap-2"></div>
+      </header>
+
+      <!-- Module Content -->
+      <main id="module-content" class="flex-1 overflow-y-auto p-7">
+        <!-- Loaded dynamically -->
+      </main>
+    </div>
+  </div>
+
+  <!-- ── Global Search Overlay ────────────────────── -->
+  <div id="global-search-overlay" class="hidden fixed inset-0 bg-black/80 z-[500] flex items-start justify-center pt-20">
+    <div class="bg-surf border border-bdrl rounded-2xl w-[580px] max-w-[92vw] shadow-2xl overflow-hidden">
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-bdr">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#787878" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="global-search-input" type="text" placeholder="Search everything…" class="flex-1 bg-transparent text-white text-base outline-none font-sans placeholder-gray-600" />
+        <kbd id="global-search-esc" class="text-gray-600 bg-bdr px-2 py-1 rounded text-xs cursor-pointer hover:text-gray-400">ESC</kbd>
+      </div>
+      <div id="global-search-results" class="max-h-96 overflow-y-auto p-3">
+        <div class="text-center text-gray-600 text-sm py-8">Type to search contacts, gigs, tasks…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toast Container ──────────────────────────── -->
+  <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col gap-2 z-[600]"></div>
+
+  <!-- ── Slide Panel ───────────────────────────────── -->
+  <div id="slide-overlay" class="hidden fixed inset-0 bg-black/60 z-[150]"></div>
+  <div id="slide-panel" class="hidden fixed top-0 right-0 h-full w-[440px] max-w-[95vw] bg-surf border-l border-bdrl z-[160] flex flex-col shadow-2xl">
+    <div id="slide-panel-header" class="flex items-center justify-between px-6 py-5 border-b border-bdr flex-shrink-0">
+      <div id="slide-panel-title" class="font-bold text-base text-white"></div>
+      <button id="slide-panel-close" class="text-gray-500 hover:text-white text-2xl leading-none">×</button>
+    </div>
+    <div id="slide-panel-body" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4"></div>
+    <div id="slide-panel-footer" class="px-6 py-4 border-t border-bdr flex gap-2 justify-end flex-shrink-0"></div>
+  </div>
+
+  <!-- ── Modal ────────────────────────────────────── -->
+  <div id="modal-overlay" class="hidden fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-5">
+    <div id="modal-box" class="bg-surf border border-bdrl rounded-2xl w-full max-h-[88vh] overflow-y-auto shadow-2xl">
+      <div class="flex items-center justify-between px-7 py-5 border-b border-bdr">
+        <div id="modal-title" class="font-bold text-lg text-white"></div>
+        <button id="modal-close" class="text-gray-500 hover:text-white text-2xl leading-none">×</button>
+      </div>
+      <div id="modal-body" class="p-7 flex flex-col gap-4"></div>
+      <div id="modal-footer" class="px-7 py-4 border-t border-bdr flex gap-2 justify-end"></div>
+    </div>
+  </div>
+
+  <!-- ── AI Token Tracker ──────────────────────────── -->
+  <div id="token-tracker" class="hidden fixed bottom-5 right-5 bg-surf border border-bdr rounded-xl p-4 z-[300] min-w-[210px] shadow-2xl text-xs text-gray-500 font-mono">
+    <div class="text-acc font-bold text-xs mb-3 font-sans">AI Usage</div>
+    <div class="flex justify-between mb-1"><span>Last in/out</span><span id="tt-last" class="text-white">—</span></div>
+    <div class="flex justify-between mb-1"><span>Last cost</span><span id="tt-cost" class="text-white">—</span></div>
+    <div class="border-t border-bdr mt-2 pt-2 flex justify-between"><span>Session total</span><span id="tt-total" class="text-acc font-bold">$0.0000</span></div>
+  </div>
+
+  <!-- Mobile sidebar overlay -->
+  <div id="mobile-sidebar-overlay"></div>
+
+  <!-- ── App Entry Point ──────────────────────────── -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
